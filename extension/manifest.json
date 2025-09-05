@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "Video CAPTCHA Blocker",
+  "version": "1.0.0",
+  "description": "Blocks video playback until user solves a CAPTCHA",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://www.youtube.com/*",
+    "https://www.tiktok.com/*",
+    "https://*.youtube.com/*",
+    "https://*.tiktok.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/*",
+        "https://www.tiktok.com/*",
+        "https://*.youtube.com/*",
+        "https://*.tiktok.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Video CAPTCHA Blocker"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["captcha-overlay.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

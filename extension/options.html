@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video CAPTCHA Blocker - Options</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .setting-group {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        
+        .setting-group h3 {
+            margin-top: 0;
+            color: #555;
+            font-size: 1.1em;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: white;
+        }
+        
+        .description {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.hidden {
+            display: none;
+        }
+        
+        .info-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .info-section h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        
+        .info-section ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .info-section li {
+            margin-bottom: 5px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Video CAPTCHA Blocker</h1>
+        
+        <div class="setting-group">
+            <h3>🎨 Appearance</h3>
+            <label for="theme">CAPTCHA Overlay Theme:</label>
+            <select id="theme">
+                <option value="dark">Dark Theme</option>
+                <option value="light">Light Theme</option>
+            </select>
+            <div class="description">
+                Choose the appearance theme for the CAPTCHA overlay that appears when videos are blocked.
+            </div>
+        </div>
+        
+        <div id="status" class="status hidden"></div>
+        
+        <div class="info-section">
+            <h3>ℹ️ About This Extension</h3>
+            <p>This extension blocks video playback on supported sites until you solve a CAPTCHA challenge.</p>
+            <ul>
+                <li><strong>Supported Sites:</strong> YouTube, TikTok, and their subdomains</li>
+                <li><strong>How it works:</strong> Automatically detects video elements and pauses them</li>
+                <li><strong>CAPTCHA:</strong> Simple text-based challenge to verify you're human</li>
+                <li><strong>Privacy:</strong> All data is stored locally in your browser</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="options.js"></script>
+</body>
+</html>
