@@ -613,15 +613,8 @@ class SudokuCaptchaComponent {
       currentRefreshBtn.style.transition = 'transform 0.5s ease';
       
       setTimeout(() => {
-        // Recreate the Sudoku puzzle
-        const gridContainer = document.getElementById('sudoku-grid-container');
-        gridContainer.innerHTML = '';
-        this.sudokuCaptcha = new SudokuCaptcha(
-          gridContainer,
-          () => this.onSudokuSuccess(),
-          this.size
-        );
-        errorDiv.style.display = 'none';
+        // Randomly choose a new captcha type
+        this.refreshToRandomCaptcha();
         currentRefreshBtn.style.transform = 'rotate(0deg)';
       }, 250);
     });
@@ -673,6 +666,45 @@ class SudokuCaptchaComponent {
       console.log('Sudoku CAPTCHA solved! Unblocking videos...');
       this.onSuccess();
     }, 1000);
+  }
+
+  refreshToRandomCaptcha() {
+    // Get the parent overlay container
+    const overlayContainer = this.container;
+    
+    // Clean up current component
+    this.destroy();
+    
+    // Randomly choose a new captcha type
+    const captchaType = Math.random();
+    
+    if (captchaType < 0.33) {
+      // Create the regular CAPTCHA component
+      this.captchaComponent = new CaptchaComponent(
+        overlayContainer,
+        () => this.onSuccess(),
+        () => this.onError(),
+        this.theme
+      );
+    } else if (captchaType < 0.66) {
+      // Create 9x9 Sudoku CAPTCHA component
+      this.captchaComponent = new SudokuCaptchaComponent(
+        overlayContainer,
+        () => this.onSuccess(),
+        () => this.onError(),
+        this.theme,
+        9
+      );
+    } else {
+      // Create 4x4 Sudoku CAPTCHA component
+      this.captchaComponent = new SudokuCaptchaComponent(
+        overlayContainer,
+        () => this.onSuccess(),
+        () => this.onError(),
+        this.theme,
+        4
+      );
+    }
   }
 
   destroy() {

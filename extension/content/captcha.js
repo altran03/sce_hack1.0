@@ -534,25 +534,9 @@ class CaptchaComponent {
       currentRefreshBtn.style.transition = 'transform 0.5s ease';
       
       setTimeout(() => {
-        this.captchaText = this.generateCaptcha();
-        captchaDisplay.innerHTML = `
-          <div style="
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
-            animation: shimmer 2s infinite;
-          "></div>
-          <span style="position: relative; z-index: 1;">${this.captchaText}</span>
-        `;
-        currentInput.value = '';
-        currentInput.focus();
-        currentInput.select();
-        errorDiv.style.display = 'none';
+        // Randomly choose a new captcha type
+        this.refreshToRandomCaptcha();
         currentRefreshBtn.style.transform = 'rotate(0deg)';
-        this.setupEvents();
       }, 250);
     });
 
@@ -611,6 +595,45 @@ class CaptchaComponent {
       "You need to lock in"
     ];
     return messages[Math.floor(Math.random() * messages.length)];
+  }
+
+  refreshToRandomCaptcha() {
+    // Get the parent overlay container
+    const overlayContainer = this.container;
+    
+    // Clean up current component
+    this.destroy();
+    
+    // Randomly choose a new captcha type
+    const captchaType = Math.random();
+    
+    if (captchaType < 0.33) {
+      // Create the regular CAPTCHA component
+      this.captchaComponent = new CaptchaComponent(
+        overlayContainer,
+        () => this.onSuccess(),
+        () => this.onError(),
+        this.theme
+      );
+    } else if (captchaType < 0.66) {
+      // Create 9x9 Sudoku CAPTCHA component
+      this.captchaComponent = new SudokuCaptchaComponent(
+        overlayContainer,
+        () => this.onSuccess(),
+        () => this.onError(),
+        this.theme,
+        9
+      );
+    } else {
+      // Create 4x4 Sudoku CAPTCHA component
+      this.captchaComponent = new SudokuCaptchaComponent(
+        overlayContainer,
+        () => this.onSuccess(),
+        () => this.onError(),
+        this.theme,
+        4
+      );
+    }
   }
 
   destroy() {
