@@ -1,7 +1,8 @@
 // Constants for the extension
 export const SUPPORTED_SITES = [
   'youtube.com/shorts/',
-  'tiktok.com'
+  'tiktok.com',
+  'instagram.com/reels/'
 ];
 
 export const CAPTCHA_LENGTH = 5;

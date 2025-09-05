@@ -17,6 +17,14 @@ export const SITE_CONFIG = {
       player: '[data-e2e="video-player"]'
     },
     features: ['shorts']
+  },
+  INSTAGRAM: {
+    domains: ['instagram.com/reels/', 'www.instagram.com/reels/'],
+    selectors: {
+      video: 'video',
+      player: '[data-e2e="video-player"]'
+    },
+    features: ['shorts']
   }
 };
 
