@@ -2,10 +2,11 @@
  * CaptchaComponent - Handles CAPTCHA UI and interactions
  */
 class CaptchaComponent {
-  constructor(container, onSuccess, onError) {
+  constructor(container, onSuccess, onError, theme = 'dark') {
     this.container = container;
     this.onSuccess = onSuccess;
     this.onError = onError;
+    this.theme = theme;
     this.captchaText = this.generateCaptcha();
     this.init();
   }
@@ -53,40 +54,222 @@ class CaptchaComponent {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
         }
+        
+        /* CAPTCHA Container - Force consistent sizing */
         .captcha-container {
-          animation: slideIn 0.4s ease-out;
+          animation: slideIn 0.4s ease-out !important;
+          /* Force specific dimensions */
+          width: 450px !important;
+          max-width: 450px !important;
+          min-width: 450px !important;
+          /* Reset any inherited styles */
+          margin: 0 !important;
+          padding: 2.5rem !important;
+          box-sizing: border-box !important;
+          /* Force font properties */
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+          font-size: 16px !important;
+          line-height: 1.5 !important;
+          /* Force positioning */
+          position: relative !important;
+          display: block !important;
+          text-align: center !important;
+          border-radius: 20px !important;
+          overflow: hidden !important;
         }
+        
+        /* CAPTCHA Elements - Force consistent sizing */
+        .captcha-container * {
+          box-sizing: border-box !important;
+        }
+        
+        .captcha-container h2 {
+          font-size: 1.8rem !important;
+          margin: 0 0 0.5rem 0 !important;
+          font-weight: 700 !important;
+          line-height: 1.2 !important;
+        }
+        
+        .captcha-container p {
+          font-size: 1rem !important;
+          margin: 0 !important;
+          line-height: 1.5 !important;
+        }
+        
+        .captcha-container input {
+          width: 100% !important;
+          padding: 1rem 1.25rem !important;
+          font-size: 1.1rem !important;
+          border-radius: 12px !important;
+          outline: none !important;
+          box-sizing: border-box !important;
+          transition: all 0.3s ease !important;
+          backdrop-filter: blur(10px) !important;
+          margin: 0 !important;
+        }
+        
+        .captcha-container button {
+          padding: 1rem 2rem !important;
+          font-size: 1rem !important;
+          font-weight: 600 !important;
+          border: none !important;
+          border-radius: 12px !important;
+          cursor: pointer !important;
+          transition: all 0.3s ease !important;
+          position: relative !important;
+          overflow: hidden !important;
+          margin: 0 !important;
+          box-sizing: border-box !important;
+        }
+        
+        .captcha-container #captcha-display {
+          font-size: 2.2rem !important;
+          font-weight: 800 !important;
+          letter-spacing: 0.3rem !important;
+          margin: 1.5rem 0 !important;
+          padding: 1.5rem !important;
+          border-radius: 16px !important;
+          position: relative !important;
+          overflow: hidden !important;
+          box-sizing: border-box !important;
+        }
+        
+        .captcha-container #error-message {
+          font-size: 0.9rem !important;
+          margin-top: 1rem !important;
+          padding: 0.75rem !important;
+          border-radius: 8px !important;
+          box-sizing: border-box !important;
+        }
+        
+        .captcha-container .captcha-help {
+          margin-top: 1.5rem !important;
+          font-size: 0.85rem !important;
+          line-height: 1.4 !important;
+          box-sizing: border-box !important;
+        }
+        
+        /* Animation classes */
         .captcha-error {
-          animation: shake 0.5s ease-in-out;
+          animation: shake 0.5s ease-in-out !important;
         }
         .captcha-success {
-          animation: success 0.6s ease-in-out;
+          animation: success 0.6s ease-in-out !important;
         }
         .captcha-input:focus {
-          animation: pulse 0.3s ease-in-out;
+          animation: pulse 0.3s ease-in-out !important;
+        }
+        
+        /* Overlay container - Force consistent sizing */
+        #captcha-overlay-container {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          background: rgba(0, 0, 0, 0.85) !important;
+          backdrop-filter: blur(8px) !important;
+          z-index: 999999 !important;
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          animation: fadeIn 0.3s ease-out !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          box-sizing: border-box !important;
         }
       `;
       document.head.appendChild(style);
     }
   }
 
+  getThemeStyles() {
+    if (this.theme === 'light') {
+      return {
+        container: `
+          background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+          color: #1f2937;
+          box-shadow: 
+            0 20px 60px rgba(0, 0, 0, 0.1),
+            0 0 0 1px rgba(0, 0, 0, 0.1);
+        `,
+        headerIcon: `
+          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        `,
+        title: `
+          background: linear-gradient(135deg, #1f2937, #374151);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        `,
+        subtitle: `
+          opacity: 0.6;
+        `,
+        captchaDisplay: `
+          background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+          border: 2px solid rgba(0, 0, 0, 0.1);
+          color: #1f2937;
+        `,
+        input: `
+          border: 2px solid rgba(0, 0, 0, 0.1);
+          background: rgba(255, 255, 255, 0.8);
+          color: #1f2937;
+        `,
+        inputFocus: `
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        `,
+        helpText: `
+          opacity: 0.5;
+        `
+      };
+    } else {
+      return {
+        container: `
+          background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+          color: #ffffff;
+          box-shadow: 
+            0 20px 60px rgba(0, 0, 0, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.1);
+        `,
+        headerIcon: `
+          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        `,
+        title: `
+          background: linear-gradient(135deg, #ffffff, #e5e7eb);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        `,
+        subtitle: `
+          opacity: 0.7;
+        `,
+        captchaDisplay: `
+          background: linear-gradient(135deg, #374151, #1f2937);
+          border: 2px solid rgba(255, 255, 255, 0.1);
+          color: #ffffff;
+        `,
+        input: `
+          border: 2px solid rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.05);
+          color: #ffffff;
+        `,
+        inputFocus: `
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        `,
+        helpText: `
+          opacity: 0.6;
+        `
+      };
+    }
+  }
+
   render() {
+    const styles = this.getThemeStyles();
+    
     this.container.innerHTML = `
-      <div class="captcha-container" style="
-        background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
-        color: #ffffff;
-        padding: 2.5rem;
-        border-radius: 20px;
-        box-shadow: 
-          0 20px 60px rgba(0, 0, 0, 0.4),
-          0 0 0 1px rgba(255, 255, 255, 0.1);
-        text-align: center;
-        max-width: 450px;
-        width: 90%;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        position: relative;
-        overflow: hidden;
-      ">
+      <div class="captcha-container" style="${styles.container}">
         <!-- Decorative background elements -->
         <div style="
           position: absolute;
@@ -115,7 +298,7 @@ class CaptchaComponent {
             justify-content: center;
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            ${styles.headerIcon}
             border-radius: 50%;
             margin-bottom: 1rem;
             box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
@@ -126,17 +309,14 @@ class CaptchaComponent {
             font-size: 1.8rem; 
             margin: 0 0 0.5rem 0; 
             font-weight: 700;
-            background: linear-gradient(135deg, #ffffff, #e5e7eb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            ${styles.title}
           ">
             Video Access Required
           </h2>
           <p style="
             font-size: 1rem; 
             margin: 0; 
-            opacity: 0.7;
+            ${styles.subtitle}
             line-height: 1.5;
           ">
             Please solve the security challenge below to continue watching
@@ -151,9 +331,8 @@ class CaptchaComponent {
             letter-spacing: 0.3rem;
             margin: 1.5rem 0;
             padding: 1.5rem;
-            background: linear-gradient(135deg, #374151, #1f2937);
+            ${styles.captchaDisplay}
             border-radius: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
             box-shadow: 
               inset 0 2px 4px rgba(0, 0, 0, 0.2),
               0 4px 12px rgba(0, 0, 0, 0.3);
@@ -178,22 +357,11 @@ class CaptchaComponent {
           <input 
             type="text" 
             id="captcha-input"
+            class="captcha-input"
             placeholder="Type the characters above"
-            style="
-              width: 100%;
-              padding: 1rem 1.25rem;
-              font-size: 1.1rem;
-              border: 2px solid rgba(255, 255, 255, 0.1);
-              border-radius: 12px;
-              background: rgba(255, 255, 255, 0.05);
-              color: #ffffff;
-              outline: none;
-              box-sizing: border-box;
-              transition: all 0.3s ease;
-              backdrop-filter: blur(10px);
-            "
+            style="${styles.input}"
             onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)';"
-            onblur="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.boxShadow='none';"
+            onblur="this.style.borderColor='${this.theme === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)'}'; this.style.boxShadow='none';"
           />
         </div>
         
@@ -257,12 +425,7 @@ class CaptchaComponent {
         "></div>
         
         <!-- Help Text -->
-        <div style="
-          margin-top: 1.5rem;
-          font-size: 0.85rem;
-          opacity: 0.6;
-          line-height: 1.4;
-        ">
+        <div class="captcha-help" style="${styles.helpText}">
           💡 Tip: Type the characters exactly as shown above
         </div>
       </div>
@@ -325,8 +488,9 @@ class CaptchaComponent {
           this.onSuccess();
         }, 1000);
       } else {
-        // Show error with shake animation
-        errorDiv.textContent = '❌ Incorrect CAPTCHA. Please try again.';
+        // Show random failure message with shake animation
+        const failureMessage = this.getRandomFailureMessage();
+        errorDiv.textContent = `❌ ${failureMessage}`;
         errorDiv.style.display = 'block';
         errorDiv.style.color = '#ef4444';
         errorDiv.style.background = 'rgba(239, 68, 68, 0.1)';
@@ -438,6 +602,15 @@ class CaptchaComponent {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
+  }
+
+  getRandomFailureMessage() {
+    const messages = [
+      "Too tired to even doomscroll? Take a break",
+      "Touch some grass",
+      "You need to lock in"
+    ];
+    return messages[Math.floor(Math.random() * messages.length)];
   }
 
   destroy() {

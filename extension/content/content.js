@@ -119,24 +119,14 @@ class VideoBlocker {
     }
   }
 
-  injectOverlay() {
+  async injectOverlay() {
+    // Get user's theme preference
+    const result = await chrome.storage.sync.get(['theme']);
+    const theme = result.theme || 'dark';
+    
     // Create container for CAPTCHA overlay
     const overlayContainer = document.createElement('div');
     overlayContainer.id = 'captcha-overlay-container';
-    overlayContainer.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      z-index: 999999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      animation: fadeIn 0.3s ease-out;
-    `;
     
     // Add fadeIn animation
     if (!document.getElementById('captcha-overlay-styles')) {
@@ -153,11 +143,12 @@ class VideoBlocker {
     
     document.body.appendChild(overlayContainer);
 
-    // Create the CAPTCHA component
+    // Create the CAPTCHA component with theme
     this.captchaComponent = new CaptchaComponent(
       overlayContainer,
       () => this.onCaptchaSuccess(),
-      () => this.onCaptchaError()
+      () => this.onCaptchaError(),
+      theme
     );
   }
 
