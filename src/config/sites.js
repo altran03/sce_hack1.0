@@ -1,13 +1,13 @@
 // Site configuration for the extension
 export const SITE_CONFIG = {
   YOUTUBE: {
-    domains: ['youtube.com', 'www.youtube.com', 'm.youtube.com'],
+    domains: ['youtube.com/shorts/', 'www.youtube.com/shorts/', 'm.youtube.com/shorts/'],
     selectors: {
       video: 'video',
       player: '#movie_player, .html5-video-player',
       shorts: '[is-shorts]'
     },
-    features: ['shorts', 'regular']
+    features: ['shorts']
   },
   
   TIKTOK: {

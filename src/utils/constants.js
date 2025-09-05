@@ -1,6 +1,6 @@
 // Constants for the extension
 export const SUPPORTED_SITES = [
-  'youtube.com',
+  'youtube.com/shorts/',
   'tiktok.com'
 ];
 
