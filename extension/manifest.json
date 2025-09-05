@@ -8,18 +8,22 @@
     "activeTab"
   ],
   "host_permissions": [
-    "https://www.youtube.com/*",
+    "https://www.youtube.com/shorts/*",
     "https://www.tiktok.com/*",
-    "https://*.youtube.com/*",
-    "https://*.tiktok.com/*"
+    "https://*.youtube.com/shorts/*",
+    "https://*.tiktok.com/*",
+    "https://www.instagram.com/reels/*",
+    "https://*.instagram.com/reels/*"
   ],
   "content_scripts": [
     {
       "matches": [
-        "https://www.youtube.com/*",
+        "https://www.youtube.com/shorts/*",
         "https://www.tiktok.com/*",
-        "https://*.youtube.com/*",
-        "https://*.tiktok.com/*"
+        "https://*.youtube.com/shorts/*",
+        "https://*.tiktok.com/*",
+        "https://www.instagram.com/reels/*",
+        "https://*.instagram.com/reels/*"
       ],
       "js": ["content.js"],
       "run_at": "document_end"

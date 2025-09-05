@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const url = currentTab.url;
         
         // Check if current site is supported
-        const supportedSites = ['youtube.com', 'tiktok.com'];
+        const supportedSites = ['youtube.com/shorts/', 'tiktok.com', 'instagram.com/reels/'];
         const isSupported = supportedSites.some(site => url.includes(site));
         
         if (isSupported) {
