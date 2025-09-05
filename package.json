@@ -4,22 +4,9 @@
   "description": "Chrome extension that blocks video playback until user solves a CAPTCHA",
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite build --watch",
-    "preview": "vite preview",
-    "clean": "rm -rf extension/*.js extension/*.map",
-    "build:clean": "npm run clean && npm run build",
-    "dev:reload": "npm run build && echo '✅ Extension built! Now reload it in Chrome: chrome://extensions/'"
-  },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "test": "echo 'Extension is ready! Load the extension/ folder in Chrome.'"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.251",
-    "@types/react": "^18.2.43",
-    "@types/react-dom": "^18.2.17",
-    "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^5.0.8"
+    "@types/chrome": "^0.0.251"
   }
 }
