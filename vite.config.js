@@ -8,7 +8,6 @@ export default defineConfig({
     outDir: 'extension',
     rollupOptions: {
       input: {
-        content: resolve(__dirname, 'src/content/content.js'),
         'captcha-overlay': resolve(__dirname, 'src/components/CaptchaOverlay.jsx')
       },
       output: {

@@ -1,5 +1,9 @@
 // Content script to detect and pause video elements
-import { MESSAGES } from '../utils/constants.js';
+// Constants
+const MESSAGES = {
+  CAPTCHA_SOLVED: 'captchaSolved',
+  TEST_CAPTCHA: 'testCaptcha'
+};
 
 class VideoBlocker {
   constructor() {
@@ -89,7 +93,7 @@ class VideoBlocker {
 
     // Inject the React overlay script
     const script = document.createElement('script');
-    script.src = chrome.runtime.getURL('dist/captcha-overlay.js');
+    script.src = chrome.runtime.getURL('captcha-overlay.js');
     script.onload = () => {
       // The React component will mount itself
     };
@@ -101,6 +105,9 @@ class VideoBlocker {
       if (request.action === MESSAGES.CAPTCHA_SOLVED) {
         this.unblockVideos();
         this.removeOverlay();
+      } else if (request.action === 'testCaptcha') {
+        // Test message from popup
+        sendResponse({ success: true, message: 'Content script is working!' });
       }
     });
   }
