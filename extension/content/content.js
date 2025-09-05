@@ -299,12 +299,6 @@ class SudokuCaptchaComponent {
           width: 500px !important;
           max-width: 500px !important;
           min-width: 500px !important;
-        }
-        
-        .sudoku-captcha-container.mini {
-          width: 400px !important;
-          max-width: 400px !important;
-          min-width: 400px !important;
           margin: 0 !important;
           padding: 2.5rem !important;
           box-sizing: border-box !important;
@@ -453,7 +447,7 @@ class SudokuCaptchaComponent {
     const styles = this.getThemeStyles();
     
     this.container.innerHTML = `
-      <div class="sudoku-captcha-container ${this.size === 4 ? 'mini' : ''}" style="${styles.container}">
+      <div class="sudoku-captcha-container" style="${styles.container}">
         <!-- Decorative background elements -->
         <div style="
           position: absolute;
@@ -475,7 +469,7 @@ class SudokuCaptchaComponent {
         "></div>
         
         <!-- Header -->
-        <div style="margin-bottom: 2rem;">
+        <div style="margin-bottom: 2rem; text-align: center;">
           <div style="
             display: inline-flex;
             align-items: center;
@@ -494,14 +488,16 @@ class SudokuCaptchaComponent {
             margin: 0 0 0.5rem 0; 
             font-weight: 700;
             ${styles.title}
+            text-align: center;
           ">
-            ${this.size === 4 ? 'Mini Sudoku Challenge' : 'Sudoku Challenge'}
+            Sudoku Challenge
           </h2>
           <p style="
             font-size: 1rem; 
             margin: 0; 
             ${styles.subtitle}
             line-height: 1.5;
+            text-align: center;
           ">
             Complete the ${this.size}x${this.size} Sudoku puzzle to continue watching
           </p>
@@ -570,7 +566,7 @@ class SudokuCaptchaComponent {
         "></div>
         
         <!-- Help Text -->
-        <div class="captcha-help" style="${styles.helpText}">
+        <div class="captcha-help" style="${styles.helpText}; text-align: center;">
           💡 Tip: Fill in the missing numbers (1-${this.size}) in each row, column, and ${this.size === 4 ? '2x2' : '3x3'} box
         </div>
       </div>

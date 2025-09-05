@@ -147,8 +147,8 @@ class SudokuCaptcha {
     table.style.border = '3px solid #fff';
 
     const boxSize = this.size === 4 ? 2 : 3;
-    const cellSize = this.size === 4 ? '50px' : '40px';
-    const fontSize = this.size === 4 ? '24px' : '18px';
+    const cellSize = '40px'; // Keep consistent cell size
+    const fontSize = '18px'; // Keep consistent font size
 
     this.grid.forEach((row, r) => {
       const tr = document.createElement('tr');
@@ -190,8 +190,10 @@ class SudokuCaptcha {
             const maxNum = this.size === 4 ? '4' : '9';
             if (e.key >= '1' && e.key <= maxNum) {
               input.value = e.key;
-              // Move to next empty cell
-              this.moveToNextCell(r, c);
+              // Move to next empty cell without filling it
+              setTimeout(() => {
+                this.moveToNextCell(r, c);
+              }, 10);
             } else if (e.key === 'Backspace' || e.key === 'Delete') {
               input.value = '';
             } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || 
@@ -205,6 +207,21 @@ class SudokuCaptcha {
               return;
             } else {
               e.preventDefault();
+            }
+          });
+          
+          // Handle input events (paste, etc.)
+          input.addEventListener('input', (e) => {
+            const value = e.target.value;
+            const maxNum = this.size === 4 ? '4' : '9';
+            
+            // Only allow single digits 1-maxNum
+            if (value.length > 1) {
+              e.target.value = value.slice(-1); // Keep only the last character
+            }
+            
+            if (value && (value < '1' || value > maxNum)) {
+              e.target.value = '';
             }
           });
           
