@@ -129,212 +129,49 @@ class VideoBlocker {
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
       z-index: 999999;
       display: flex;
       justify-content: center;
       align-items: center;
+      animation: fadeIn 0.3s ease-out;
     `;
+    
+    // Add fadeIn animation
+    if (!document.getElementById('captcha-overlay-styles')) {
+      const style = document.createElement('style');
+      style.id = 'captcha-overlay-styles';
+      style.textContent = `
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
     
     document.body.appendChild(overlayContainer);
 
-    // Create the CAPTCHA interface
-    this.createCaptchaInterface();
+    // Create the CAPTCHA component
+    this.captchaComponent = new CaptchaComponent(
+      overlayContainer,
+      () => this.onCaptchaSuccess(),
+      () => this.onCaptchaError()
+    );
   }
 
-  createCaptchaInterface() {
-    const container = document.getElementById('captcha-overlay-container');
-    if (!container) return;
-
-    // Generate CAPTCHA
-    const captchaText = this.generateCaptcha();
-    
-    // Create CAPTCHA HTML
-    container.innerHTML = `
-      <div style="
-        background: #1a1a1a;
-        color: #ffffff;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        text-align: center;
-        max-width: 400px;
-        width: 90%;
-        font-family: Arial, sans-serif;
-      ">
-        <h2 style="font-size: 1.5rem; margin-bottom: 1rem; font-weight: bold;">
-          🔒 Video Access Required
-        </h2>
-        <p style="font-size: 0.9rem; margin-bottom: 1rem; opacity: 0.8;">
-          Please solve the CAPTCHA below to continue watching videos
-        </p>
-        
-        <div style="
-          font-size: 2rem;
-          font-weight: bold;
-          letter-spacing: 0.5rem;
-          margin: 1rem 0;
-          padding: 1rem;
-          background: #333333;
-          border-radius: 8px;
-          border: 2px dashed #666666;
-        " id="captcha-display">
-          ${captchaText}
-        </div>
-        
-        <input 
-          type="text" 
-          id="captcha-input"
-          placeholder="Enter the text above"
-          style="
-            width: 100%;
-            padding: 0.75rem;
-            font-size: 1rem;
-            border: 2px solid #555555;
-            border-radius: 6px;
-            background: #2a2a2a;
-            color: #ffffff;
-            margin-bottom: 1rem;
-            outline: none;
-            box-sizing: border-box;
-          "
-        />
-        
-        <div>
-          <button 
-            id="verify-btn"
-            style="
-              background: #4CAF50;
-              color: white;
-              padding: 0.75rem 1.5rem;
-              font-size: 1rem;
-              border: none;
-              border-radius: 6px;
-              cursor: pointer;
-              margin-right: 0.5rem;
-              transition: background-color 0.3s;
-            "
-          >
-            Verify
-          </button>
-          <button 
-            id="refresh-btn"
-            style="
-              background: #2196F3;
-              color: white;
-              padding: 0.75rem 1.5rem;
-              font-size: 1rem;
-              border: none;
-              border-radius: 6px;
-              cursor: pointer;
-              transition: background-color 0.3s;
-            "
-          >
-            🔄 Refresh
-          </button>
-        </div>
-        
-        <div id="error-message" style="
-          color: #f44336;
-          font-size: 0.9rem;
-          margin-top: 0.5rem;
-          display: none;
-        "></div>
-      </div>
-    `;
-
-    // Add event listeners
-    this.setupCaptchaEvents(captchaText);
+  onCaptchaSuccess() {
+    console.log('CAPTCHA solved! Unblocking videos...');
+    this.unblockVideos();
+    this.removeOverlay();
   }
 
-  generateCaptcha() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = '';
-    for (let i = 0; i < 5; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
+  onCaptchaError() {
+    console.log('CAPTCHA error occurred');
+    // Component handles its own error display
   }
 
-  setupCaptchaEvents(originalCaptcha) {
-    const input = document.getElementById('captcha-input');
-    const verifyBtn = document.getElementById('verify-btn');
-    const refreshBtn = document.getElementById('refresh-btn');
-    const errorDiv = document.getElementById('error-message');
-    const captchaDisplay = document.getElementById('captcha-display');
-
-    // Focus input
-    input.focus();
-
-    // Clear any existing event listeners by cloning elements
-    const newVerifyBtn = verifyBtn.cloneNode(true);
-    const newRefreshBtn = refreshBtn.cloneNode(true);
-    const newInput = input.cloneNode(true);
-    
-    verifyBtn.parentNode.replaceChild(newVerifyBtn, verifyBtn);
-    refreshBtn.parentNode.replaceChild(newRefreshBtn, refreshBtn);
-    input.parentNode.replaceChild(newInput, input);
-
-    // Get references to the new elements
-    const currentInput = document.getElementById('captcha-input');
-    const currentVerifyBtn = document.getElementById('verify-btn');
-    const currentRefreshBtn = document.getElementById('refresh-btn');
-
-    // Verify button click
-    currentVerifyBtn.addEventListener('click', () => {
-      const userInput = currentInput.value.trim().toUpperCase();
-      const correctAnswer = originalCaptcha.toUpperCase();
-      
-      console.log('User input:', userInput);
-      console.log('Correct answer:', correctAnswer);
-      
-      if (userInput === correctAnswer) {
-        // CAPTCHA solved successfully
-        console.log('CAPTCHA solved! Unblocking videos...');
-        this.unblockVideos();
-        this.removeOverlay();
-      } else {
-        // Show error and generate new CAPTCHA
-        errorDiv.textContent = 'Incorrect CAPTCHA. Please try again.';
-        errorDiv.style.display = 'block';
-        currentInput.value = '';
-        const newCaptcha = this.generateCaptcha();
-        captchaDisplay.textContent = newCaptcha;
-        this.setupCaptchaEvents(newCaptcha);
-      }
-    });
-
-    // Refresh button click
-    currentRefreshBtn.addEventListener('click', () => {
-      const newCaptcha = this.generateCaptcha();
-      captchaDisplay.textContent = newCaptcha;
-      currentInput.value = '';
-      errorDiv.style.display = 'none';
-      this.setupCaptchaEvents(newCaptcha);
-    });
-
-    // Enter key press
-    currentInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        currentVerifyBtn.click();
-      }
-    });
-
-    // Button hover effects
-    currentVerifyBtn.addEventListener('mouseover', () => {
-      currentVerifyBtn.style.backgroundColor = '#45a049';
-    });
-    currentVerifyBtn.addEventListener('mouseout', () => {
-      currentVerifyBtn.style.backgroundColor = '#4CAF50';
-    });
-
-    currentRefreshBtn.addEventListener('mouseover', () => {
-      currentRefreshBtn.style.backgroundColor = '#1976D2';
-    });
-    currentRefreshBtn.addEventListener('mouseout', () => {
-      currentRefreshBtn.style.backgroundColor = '#2196F3';
-    });
-  }
 
   setupMessageListener() {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -379,6 +216,12 @@ class VideoBlocker {
   }
 
   removeOverlay() {
+    // Clean up the CAPTCHA component
+    if (this.captchaComponent) {
+      this.captchaComponent.destroy();
+      this.captchaComponent = null;
+    }
+    
     const overlay = document.getElementById('captcha-overlay-container');
     if (overlay) {
       overlay.remove();

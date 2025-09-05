@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const statusDiv = document.getElementById('status');
     const statusText = document.getElementById('statusText');
     const optionsBtn = document.getElementById('optionsBtn');
-    const testBtn = document.getElementById('testBtn');
 
     // Check if extension is active on current tab
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
@@ -26,20 +25,5 @@ document.addEventListener('DOMContentLoaded', function() {
     // Open options page
     optionsBtn.addEventListener('click', function() {
         chrome.runtime.openOptionsPage();
-    });
-
-    // Test functionality on current page
-    testBtn.addEventListener('click', function() {
-        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { action: 'testCaptcha' }, function(response) {
-                if (chrome.runtime.lastError) {
-                    statusText.textContent = '❌ Content script not loaded';
-                    statusDiv.className = 'status inactive';
-                } else {
-                    statusText.textContent = '✅ Test message sent';
-                    statusDiv.className = 'status active';
-                }
-            });
-        });
     });
 });
