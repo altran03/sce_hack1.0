@@ -1,47 +1,49 @@
 # Video CAPTCHA Blocker
 
-A Chrome extension (Manifest V3) that blocks video playback on YouTube Shorts, TikTok, and other supported sites until the user solves a CAPTCHA overlay.
+A Chrome extension (Manifest V3) that blocks video playback on YouTube, TikTok, and Instagram Reels until the user solves a CAPTCHA overlay.
 
 ## Features
 
 - 🔒 **Automatic Video Blocking**: Detects and pauses video elements on supported sites
 - 🎨 **Customizable Themes**: Choose between dark and light themes for the CAPTCHA overlay
 - ⚡ **Real-time Detection**: Uses MutationObserver to catch dynamically loaded videos
-- 🎯 **Targeted Sites**: Currently supports YouTube and TikTok
+- 🎯 **Multi-Platform Support**: Works on YouTube, TikTok, and Instagram Reels
 - 💾 **Persistent Settings**: Theme preferences saved with Chrome storage sync
+- 🎮 **Smart Video Control**: Uses spacebar simulation for natural pause/resume
+- 🔄 **One CAPTCHA Per Video**: Each video requires only one CAPTCHA solution
+- 📱 **Site-Specific Behavior**: TikTok videos play behind CAPTCHA, others pause completely
 
 ## Supported Sites
 
-- YouTube (youtube.com and all subdomains)
-- TikTok (tiktok.com and all subdomains)
+- **YouTube** (youtube.com and all subdomains)
+- **TikTok** (tiktok.com and all subdomains) - Videos play behind CAPTCHA
+- **Instagram Reels** (instagram.com) - Videos pause completely
 
 ## Installation
 
 ### Development Setup
 
-1. **Clone and install dependencies:**
+1. **Clone the repository:**
    ```bash
    git clone <your-repo-url>
    cd video-captcha-blocker
-   npm install
    ```
 
-2. **Build the extension:**
-   ```bash
-   npm run build
-   ```
-
-3. **Load in Chrome:**
+2. **Load in Chrome:**
    - Open Chrome and go to `chrome://extensions/`
    - Enable "Developer mode"
    - Click "Load unpacked" and select the `extension/` folder
    - The extension should now appear in your extensions list
 
+3. **Development workflow:**
+   - Edit files directly in the `extension/` folder
+   - Reload the extension in Chrome to test changes
+   - No build process required!
+
 ### Production Installation
 
-1. Build the extension: `npm run build`
-2. Zip the entire project folder (excluding `node_modules` and `dist`)
-3. Upload to Chrome Web Store (requires developer account)
+1. Zip the `extension/` folder
+2. Upload to Chrome Web Store (requires developer account)
 
 ## Project Structure
 
@@ -49,55 +51,53 @@ A Chrome extension (Manifest V3) that blocks video playback on YouTube Shorts, T
 ├── extension/             # Extension files (load this folder in Chrome)
 │   ├── manifest.json     # Extension manifest (Manifest V3)
 │   ├── background.js     # Service worker
+│   ├── content.js        # Main content script with CAPTCHA logic
 │   ├── options.html      # Options page
 │   ├── options.js        # Options page logic
 │   ├── popup.html        # Extension popup
 │   ├── popup.js          # Popup logic
-│   ├── content.js        # Built content script
-│   └── captcha-overlay.js # Built React overlay
-├── src/                  # Source code
-│   ├── components/       # React components
-│   │   ├── CaptchaOverlay.jsx
-│   │   └── CaptchaGenerator.js
-│   ├── content/          # Content script source
-│   │   └── content.js
-│   ├── utils/            # Utility functions
-│   │   ├── storage.js    # Chrome storage utilities
-│   │   └── constants.js  # App constants
-│   ├── config/           # Configuration files
-│   │   └── sites.js      # Site-specific configs
-│   └── types/            # Type definitions
-│       └── index.js
-├── package.json          # Dependencies and build scripts
-├── vite.config.js        # Vite configuration for bundling
+│   └── constants.js      # App constants
+├── package.json          # Minimal dependencies
+├── package-lock.json     # Dependency lock file
 └── README.md
 ```
+
+**Note**: This project uses a simplified structure with no build process. All extension files are directly editable in the `extension/` folder.
 
 ## How It Works
 
 1. **Content Script**: The `content.js` script runs on supported websites and:
    - Detects existing `<video>` elements
-   - Monitors for new videos added to the page
-   - Pauses videos immediately when detected
+   - Monitors for new videos added to the page using MutationObserver
+   - Tracks URL changes for single-page applications (Instagram Reels)
+   - Pauses videos immediately when detected (except TikTok)
    - Injects the CAPTCHA overlay
 
-2. **CAPTCHA Overlay**: A React component that:
+2. **CAPTCHA Overlay**: A native HTML/JavaScript interface that:
    - Generates random text-based CAPTCHAs
-   - Provides a user-friendly interface
-   - Validates user input
-   - Sends success message to unblock videos
+   - Provides a user-friendly interface with autoselect input
+   - Validates user input (case-insensitive, whitespace-tolerant)
+   - Automatically unblocks videos upon successful completion
+   - Tracks solved videos to prevent re-blocking
 
-3. **Options Page**: Allows users to:
+3. **Site-Specific Behavior**:
+   - **TikTok**: Videos continue playing behind the CAPTCHA overlay
+   - **Instagram Reels**: Videos pause completely until CAPTCHA is solved
+   - **YouTube**: Videos pause completely until CAPTCHA is solved
+
+4. **Options Page**: Allows users to:
    - Choose between dark/light themes
    - View extension information
    - Settings are saved with `chrome.storage.sync`
 
 ## Development
 
-### Available Scripts
+### Development Workflow
 
-- `npm run build` - Build the extension for production
-- `npm run dev` - Build in watch mode for development
+1. **Edit files directly** in the `extension/` folder
+2. **Reload the extension** in Chrome (`chrome://extensions/` → click reload)
+3. **Test changes** on supported sites
+4. **No build process required!**
 
 ### Adding New Sites
 
@@ -109,11 +109,12 @@ To support additional video sites:
 
 ### Customizing the CAPTCHA
 
-The CAPTCHA logic is in `src/CaptchaOverlay.jsx`. You can:
-- Modify the CAPTCHA generation algorithm
-- Change the visual appearance
+The CAPTCHA logic is in `extension/content.js`. You can:
+- Modify the CAPTCHA generation algorithm in the `generateCaptcha()` function
+- Change the visual appearance in the `injectOverlay()` function
 - Add different types of challenges
 - Implement more complex validation
+- Add AI-generated CAPTCHAs using external APIs
 
 ## Browser Compatibility
 
@@ -141,16 +142,23 @@ MIT License - see LICENSE file for details
 ## Troubleshooting
 
 ### Extension Not Working
-- Ensure you're on a supported site (YouTube/TikTok)
+- Ensure you're on a supported site (YouTube/TikTok/Instagram)
 - Check that the extension is enabled in `chrome://extensions/`
 - Try refreshing the page after installing
-
-### Build Issues
-- Make sure Node.js 16+ is installed
-- Run `npm install` to ensure all dependencies are installed
-- Check that the `dist/` folder is created after building
+- Check browser console for any error messages
 
 ### CAPTCHA Not Appearing
 - Check browser console for errors
-- Ensure the React overlay script is loading correctly
 - Verify content script permissions in manifest.json
+- Ensure the extension is reloaded after making changes
+- Try scrolling to a new video on TikTok/Instagram
+
+### Videos Not Pausing
+- Check if you're on TikTok (videos play behind CAPTCHA by design)
+- Verify the extension is active on the current site
+- Check browser console for JavaScript errors
+
+### CAPTCHA Persisting After Solving
+- This should not happen with the current implementation
+- If it does, check browser console for errors
+- Try reloading the extension
