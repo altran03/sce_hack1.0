@@ -8,7 +8,8 @@
     "dev": "vite build --watch",
     "preview": "vite preview",
     "clean": "rm -rf extension/*.js extension/*.map",
-    "build:clean": "npm run clean && npm run build"
+    "build:clean": "npm run clean && npm run build",
+    "dev:reload": "npm run build && echo '✅ Extension built! Now reload it in Chrome: chrome://extensions/'"
   },
   "dependencies": {
     "react": "^18.2.0",
