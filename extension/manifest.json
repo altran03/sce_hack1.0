@@ -25,22 +25,16 @@
         "https://www.instagram.com/reels/*",
         "https://*.instagram.com/reels/*"
       ],
-      "js": ["content.js"],
+      "js": ["content/content.js"],
       "run_at": "document_end"
     }
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background/background.js"
   },
-  "options_page": "options.html",
+  "options_page": "options/options.html",
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "popup/popup.html",
     "default_title": "Video CAPTCHA Blocker"
-  },
-  "web_accessible_resources": [
-    {
-      "resources": ["captcha-overlay.js"],
-      "matches": ["<all_urls>"]
-    }
-  ]
+  }
 }

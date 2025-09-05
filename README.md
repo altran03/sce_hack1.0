@@ -50,19 +50,27 @@ A Chrome extension (Manifest V3) that blocks video playback on YouTube, TikTok, 
 ```
 ├── extension/             # Extension files (load this folder in Chrome)
 │   ├── manifest.json     # Extension manifest (Manifest V3)
-│   ├── background.js     # Service worker
-│   ├── content.js        # Main content script with CAPTCHA logic
-│   ├── options.html      # Options page
-│   ├── options.js        # Options page logic
-│   ├── popup.html        # Extension popup
-│   ├── popup.js          # Popup logic
-│   └── constants.js      # App constants
+│   ├── background/       # Background script
+│   │   └── background.js
+│   ├── content/          # Content scripts
+│   │   └── content.js    # Main CAPTCHA logic
+│   ├── popup/            # Extension popup
+│   │   ├── popup.html
+│   │   └── popup.js
+│   ├── options/          # Options page
+│   │   ├── options.html
+│   │   └── options.js
+│   ├── assets/           # Static assets
+│   │   ├── icons/        # Extension icons
+│   │   └── styles/       # CSS files
+│   └── utils/            # Utility files
+│       └── constants.js
 ├── package.json          # Minimal dependencies
 ├── package-lock.json     # Dependency lock file
 └── README.md
 ```
 
-**Note**: This project uses a simplified structure with no build process. All extension files are directly editable in the `extension/` folder.
+**Note**: This project uses a clean, organized structure with no build process. All extension files are directly editable in the `extension/` folder.
 
 ## How It Works
 
@@ -109,12 +117,21 @@ To support additional video sites:
 
 ### Customizing the CAPTCHA
 
-The CAPTCHA logic is in `extension/content.js`. You can:
+The CAPTCHA logic is in `extension/content/content.js`. You can:
 - Modify the CAPTCHA generation algorithm in the `generateCaptcha()` function
 - Change the visual appearance in the `injectOverlay()` function
 - Add different types of challenges
 - Implement more complex validation
 - Add AI-generated CAPTCHAs using external APIs
+
+### File Organization
+
+- **Background Script**: `extension/background/background.js`
+- **Content Script**: `extension/content/content.js`
+- **Popup**: `extension/popup/popup.html` and `extension/popup/popup.js`
+- **Options**: `extension/options/options.html` and `extension/options/options.js`
+- **Utilities**: `extension/utils/constants.js`
+- **Assets**: `extension/assets/icons/` and `extension/assets/styles/`
 
 ## Browser Compatibility
 
