@@ -25,7 +25,7 @@
         "https://www.instagram.com/reels/*",
         "https://*.instagram.com/reels/*"
       ],
-      "js": ["content/captcha.js", "content/content.js"],
+      "js": ["content/captcha.js", "content/SudokuCaptcha.js", "content/content.js"],
       "run_at": "document_end"
     }
   ],
