@@ -1,3 +1,6 @@
+# Video Demo
+https://youtu.be/BCy8jym2-sg 
+
 # Video CAPTCHA Blocker
 
 A Chrome extension (Manifest V3) that blocks video playback on YouTube, TikTok, and Instagram Reels until the user solves a CAPTCHA overlay.
