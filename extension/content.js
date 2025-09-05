@@ -54,10 +54,13 @@ class VideoBlocker {
     video.pause();
     
     // Prevent play attempts
-    video.addEventListener('play', (e) => {
+    const blockHandler = (e) => {
       e.preventDefault();
       video.pause();
-    });
+    };
+
+    video._blockHandler = blockHandler;
+    video.addEventListener('pause', blockHandler);
 
     // Inject overlay if not already done
     if (!this.overlayInjected) {
@@ -297,8 +300,11 @@ class VideoBlocker {
 
   unblockVideos() {
     this.videos.forEach(video => {
-      // Remove event listeners and allow playback
-      video.removeEventListener('play', (e) => e.preventDefault());
+      if (video._blockHandler) {
+        video.removeEventListener('play', video._blockHandler);
+        delete video._blockHandler;
+      }
+      video.play();
     });
     this.videos.clear();
   }
